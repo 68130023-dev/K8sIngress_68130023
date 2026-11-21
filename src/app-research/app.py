@@ -49,8 +49,14 @@ def save_content(text):
     os.replace(tmp, DATA_FILE)  # เขียนแบบ atomic กันไฟล์พังกลางคัน
 
 
-def word_count(text):
-    return len([w for w in text.split() if w.strip()])
+def char_count(text):
+    """นับจำนวนตัวอักษร ไม่นับช่องว่างและการขึ้นบรรทัดใหม่
+
+    ไม่ใช้การนับคำด้วย text.split() เพราะภาษาไทยไม่เว้นวรรคระหว่างคำ
+    การแยกด้วยช่องว่างจะนับทั้งวรรคเป็นคำเดียว ทำให้ได้ตัวเลขต่ำกว่าความจริงมาก
+    การนับคำภาษาไทยที่ถูกต้องต้องใช้พจนานุกรมตัดคำ เช่น pythainlp หรือ MS Word
+    """
+    return len([c for c in text if not c.isspace()])
 
 
 def now_th():
@@ -115,8 +121,8 @@ def research():
   <div class="meta">
     <strong>ผู้วิจัย:</strong> {STUDENT_NAME} (รหัสนักศึกษา {STUDENT_ID})<br>
     <strong>แหล่งข้อมูล:</strong> {source} &nbsp;|&nbsp;
-    <strong>ความยาว:</strong> {word_count(content)} คำ &nbsp;|&nbsp;
-    <strong>ดูเมื่อ:</strong> {now_th()}
+    <strong>ความยาว:</strong> {char_count(content):,} ตัวอักษร &nbsp;|&nbsp;
+    <strong>ดูเมื่อ:</strong> {now_th()} น.
   </div>
   <div class="content">{html.escape(content)}</div>
   <footer>Served by <strong>app-research</strong> &middot;
