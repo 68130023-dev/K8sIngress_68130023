@@ -1,0 +1,8 @@
+# Namespace สำหรับงานนี้โดยเฉพาะ แยกออกจาก default เพื่อให้ลบ/ตรวจสอบง่าย
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: id-023
+  labels:
+    student-id: "68130023"
+    course: k8s-assignment

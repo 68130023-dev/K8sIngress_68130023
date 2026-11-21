@@ -1,0 +1,57 @@
+# app-about : เว็บ static ด้วย nginx แสดงรูป ชื่อ และรหัสนักศึกษา
+# รับผิดชอบ path  /  และ  /about  ของ www.id-023.com
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-about
+  namespace: id-023
+  labels:
+    app: app-about
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-about
+  template:
+    metadata:
+      labels:
+        app: app-about
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:alpine
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 80
+          volumeMounts:
+            - name: web
+              mountPath: /usr/share/nginx/html
+            - name: nginx-conf
+              mountPath: /etc/nginx/conf.d
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 80
+            initialDelaySeconds: 15
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 10m
+              memory: 24Mi
+            limits:
+              cpu: 200m
+              memory: 96Mi
+      volumes:
+        - name: web
+          configMap:
+            name: about-web
+        - name: nginx-conf
+          configMap:
+            name: about-nginx-conf

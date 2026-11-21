@@ -1,0 +1,52 @@
+# Service ทั้ง 3 ตัว เปิด port 80 ภายใน cluster ให้ Ingress เรียกใช้
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-about
+  namespace: id-023
+  labels:
+    app: app-about
+spec:
+  type: ClusterIP
+  selector:
+    app: app-about
+  ports:
+    - name: http
+      port: 80
+      targetPort: 80
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-api
+  namespace: id-023
+  labels:
+    app: app-api
+spec:
+  type: ClusterIP
+  selector:
+    app: app-api
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-research
+  namespace: id-023
+  labels:
+    app: app-research
+spec:
+  type: ClusterIP
+  selector:
+    app: app-research
+  ports:
+    - name: http
+      port: 80
+      targetPort: 5000
+      protocol: TCP

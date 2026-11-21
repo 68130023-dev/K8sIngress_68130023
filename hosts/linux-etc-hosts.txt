@@ -1,0 +1,15 @@
+# ===== เพิ่มบรรทัดเหล่านี้ลงใน /etc/hosts ของ Ubuntu Server (server1) =====
+#
+# 192.168.176.137 คือ INTERNAL-IP ของ node server1 (ดูจาก kubectl get nodes -o wide)
+# ซึ่งเป็น IP เดียวกับที่ Traefik (svclb) เปิดรับ port 80 ไว้
+#
+# วิธีเพิ่ม:
+#   sudo nano /etc/hosts
+# หรือ
+#   echo "192.168.176.137 www.id-023.com admin.id-023.com" | sudo tee -a /etc/hosts
+#
+# ตรวจสอบ:
+#   getent hosts www.id-023.com
+#   curl -I http://www.id-023.com/
+
+192.168.176.137   www.id-023.com   admin.id-023.com

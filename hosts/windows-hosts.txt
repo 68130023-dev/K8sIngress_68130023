@@ -1,0 +1,20 @@
+; ===== เพิ่มบรรทัดเหล่านี้ลงในไฟล์ hosts ของ Windows =====
+;
+; ตำแหน่งไฟล์:  C:\Windows\System32\drivers\etc\hosts
+;
+; วิธีแก้:
+;   1. กดปุ่ม Windows พิมพ์ว่า  notepad
+;   2. คลิกขวาที่ Notepad เลือก  Run as administrator   (ต้องเป็น admin เท่านั้น)
+;   3. File > Open > วางพาธ  C:\Windows\System32\drivers\etc\hosts
+;      (เปลี่ยนตัวกรองไฟล์เป็น All Files ด้วย ไม่งั้นจะมองไม่เห็น)
+;   4. เพิ่มบรรทัดด้านล่าง แล้วบันทึก
+;
+; ตรวจสอบจาก Command Prompt:
+;   ping www.id-023.com
+;   curl http://www.id-023.com/
+;
+; 192.168.176.137 คือ IP ของ Ubuntu VM (server1) ที่ VMware NAT แจกให้
+; ถ้า VM ได้ IP ใหม่หลัง reboot ต้องกลับมาแก้บรรทัดนี้ด้วย
+
+192.168.176.137   www.id-023.com
+192.168.176.137   admin.id-023.com

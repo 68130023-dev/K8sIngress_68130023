@@ -1,0 +1,24 @@
+# Ingress ผู้ดูแล : admin.id-023.com
+#
+#   /       -> app-research  (โค้ดจะ redirect 302 ไป /edit ให้อัตโนมัติ)
+#   /edit   -> app-research  (หน้าแก้ไข + บันทึกกลับลง PVC)
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: admin-ingress-023
+  namespace: id-023
+  labels:
+    app: id-023
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: admin.id-023.com
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-research
+                port:
+                  number: 80

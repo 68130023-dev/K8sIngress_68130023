@@ -1,0 +1,135 @@
+# สร้างอัตโนมัติจาก src/ โดย scripts/gen_configmaps.py
+# อย่าแก้ไฟล์นี้ตรง ๆ ให้ไปแก้ที่ src/ แล้วรันสคริปต์ใหม่
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: about-web
+  namespace: id-023
+data:
+  index.html: |
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>www.id-023.com - 68130023</title>
+    <style>
+      *{box-sizing:border-box}
+      body{font-family:'Noto Sans Thai',Tahoma,'Segoe UI',sans-serif;margin:0;
+           padding:48px 20px;background:#f1f5f9;color:#1e293b;line-height:1.8}
+      .wrap{max-width:780px;margin:0 auto}
+      header{text-align:center;margin-bottom:36px}
+      h1{font-size:28px;margin:0 0 6px;color:#0f172a}
+      .sub{color:#64748b;font-size:15px;margin:0}
+      .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+      .card{background:#fff;padding:24px;border-radius:12px;text-decoration:none;
+            color:inherit;box-shadow:0 2px 12px rgba(15,23,42,.07);
+            border-top:4px solid #2563eb;transition:transform .15s,box-shadow .15s}
+      .card:hover{transform:translateY(-3px);box-shadow:0 6px 20px rgba(15,23,42,.13)}
+      .card.b{border-top-color:#0d9488}
+      .card.c{border-top-color:#d97706}
+      .card.d{border-top-color:#7c3aed}
+      .card h2{font-size:18px;margin:0 0 6px;color:#0f172a}
+      .card code{font-size:13px;color:#2563eb;word-break:break-all}
+      .card p{font-size:14px;color:#64748b;margin:8px 0 0}
+      .app{display:inline-block;font-size:11px;padding:2px 9px;border-radius:999px;
+           background:#e2e8f0;color:#475569;margin-top:12px}
+      footer{text-align:center;margin-top:36px;font-size:13px;color:#94a3b8}
+    </style>
+    </head>
+    <body>
+    <div class="wrap">
+      <header>
+        <h1>www.id-023.com</h1>
+        <p class="sub">นายยุทธนา เอมยงค์ &middot; รหัสนักศึกษา 68130023 &middot;
+           ระบบให้บริการบน Kubernetes</p>
+      </header>
+
+      <div class="grid">
+        <a class="card" href="/about">
+          <h2>เกี่ยวกับผู้จัดทำ</h2>
+          <code>www.id-023.com/about</code>
+          <p>แสดงรูป ชื่อ และรหัสนักศึกษา</p>
+          <span class="app">app-about</span>
+        </a>
+
+        <a class="card b" href="/research">
+          <h2>สรุปงานวิจัย</h2>
+          <code>www.id-023.com/research</code>
+          <p>สรุปงานวิจัยที่นำเสนอในวิชาสัมมนา</p>
+          <span class="app">app-research</span>
+        </a>
+
+        <a class="card c" href="/api/สวัสดี">
+          <h2>แสดงข้อความ</h2>
+          <code>www.id-023.com/api/&lt;ข้อความ&gt;</code>
+          <p>นำข้อความจาก URL มาแสดงตัวใหญ่กลางจอ</p>
+          <span class="app">app-api</span>
+        </a>
+
+        <a class="card d" href="http://admin.id-023.com/edit">
+          <h2>ระบบผู้ดูแล</h2>
+          <code>admin.id-023.com/edit</code>
+          <p>แก้ไขและบันทึกสรุปงานวิจัยกลับ</p>
+          <span class="app">app-research</span>
+        </a>
+      </div>
+
+      <footer>Served by <strong>app-about</strong> (nginx) &middot;
+              Ingress: traefik &middot; Cluster: k3s</footer>
+    </div>
+    </body>
+    </html>
+  about.html: |
+    <!DOCTYPE html>
+    <html lang="th">
+    <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>เกี่ยวกับผู้จัดทำ - 68130023</title>
+    <style>
+      *{box-sizing:border-box}
+      body{font-family:'Noto Sans Thai',Tahoma,'Segoe UI',sans-serif;margin:0;
+           padding:40px 20px;background:#f1f5f9;color:#1e293b;line-height:1.8}
+      .nav{max-width:520px;margin:0 auto 18px;font-size:14px}
+      .nav a{color:#2563eb;text-decoration:none;margin-right:16px}
+      .nav a:hover{text-decoration:underline}
+      .card{max-width:520px;margin:0 auto;background:#fff;padding:40px 32px;
+            border-radius:14px;box-shadow:0 2px 16px rgba(15,23,42,.1);text-align:center}
+      .photo{width:170px;height:170px;border-radius:50%;object-fit:cover;
+             border:5px solid #2563eb;background:#e2e8f0}
+      h1{font-size:26px;margin:20px 0 4px;color:#0f172a}
+      .sid{display:inline-block;font-size:16px;font-weight:600;color:#1d4ed8;
+           background:#dbeafe;padding:6px 18px;border-radius:999px;margin:8px 0 18px}
+      .info{font-size:15px;color:#475569;margin:0}
+      .badge{display:inline-block;font-size:12px;padding:3px 10px;border-radius:999px;
+             background:#e0e7ff;color:#3730a3;margin-top:22px}
+      footer{margin-top:14px;font-size:12px;color:#94a3b8}
+    </style>
+    </head>
+    <body>
+    <div class="nav">
+      <a href="/">หน้าแรก</a>
+      <a href="/research">สรุปงานวิจัย</a>
+      <a href="/api/สวัสดี">ทดสอบ api</a>
+    </div>
+
+    <div class="card">
+      <img class="photo" src="/profile.jpg" alt="รูปนักศึกษา"
+           onerror="this.onerror=null;this.src='data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20200%20200%22%3E%3Crect%20width%3D%22200%22%20height%3D%22200%22%20fill%3D%22%232563eb%22%2F%3E%3Ccircle%20cx%3D%22100%22%20cy%3D%2278%22%20r%3D%2238%22%20fill%3D%22%23ffffff%22%2F%3E%3Cpath%20d%3D%22M30%20200c0-42%2032-70%2070-70s70%2028%2070%2070z%22%20fill%3D%22%23ffffff%22%2F%3E%3C%2Fsvg%3E'">
+
+      <h1>นายยุทธนา เอมยงค์</h1>
+      <div class="sid">รหัสนักศึกษา 68130023</div>
+
+      <p class="info">
+        หลักสูตรวิศวกรรมศาสตรมหาบัณฑิต<br>
+        สาขาวิชาวิศวกรรมคอมพิวเตอร์<br>
+        วิทยาลัยวิศวกรรมศาสตร์และเทคโนโลยี<br>
+        มหาวิทยาลัยธุรกิจบัณฑิตย์
+      </p>
+
+      <span class="badge">app-about</span>
+      <footer>www.id-023.com/about</footer>
+    </div>
+    </body>
+    </html>

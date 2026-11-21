@@ -1,0 +1,64 @@
+# app-api : Flask นำข้อความจาก URL มาแสดงตัวใหญ่กลางจอ
+# รับผิดชอบ path  /api/<ข้อความ>  ของ www.id-023.com
+#
+# หมายเหตุ: ใช้ image python:3.10-slim มาตรฐาน แล้วติดตั้ง flask ตอน container เริ่มทำงาน
+#           จึงไม่ต้อง build image เองและไม่ต้องใช้ container registry
+#           แต่ node ต้องต่ออินเทอร์เน็ตได้ตอน pod เริ่มทำงาน
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-api
+  namespace: id-023
+  labels:
+    app: app-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: app-api
+  template:
+    metadata:
+      labels:
+        app: app-api
+    spec:
+      containers:
+        - name: flask
+          image: python:3.10-slim
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - pip install --no-cache-dir --disable-pip-version-check -q flask &&
+              exec python /app/app.py
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+          ports:
+            - name: http
+              containerPort: 5000
+          volumeMounts:
+            - name: code
+              mountPath: /app
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 40      # เผื่อเวลา pip install
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 120
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: code
+          configMap:
+            name: api-app-code

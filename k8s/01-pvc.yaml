@@ -1,0 +1,18 @@
+# PersistentVolumeClaim สำหรับเก็บไฟล์สรุปงานวิจัยที่แก้ผ่านหน้า /edit
+# ใช้ StorageClass "local-path" ซึ่งเป็น default ของ k3s (rancher.io/local-path)
+# หมายเหตุ: local-path เป็นแบบ WaitForFirstConsumer
+#          ดังนั้น PVC จะค้างสถานะ Pending จนกว่า pod จะถูก schedule -> ถือว่าปกติ
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: research-data-pvc
+  namespace: id-023
+  labels:
+    app: app-research
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi

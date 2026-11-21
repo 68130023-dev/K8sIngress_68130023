@@ -1,0 +1,75 @@
+# app-research : Flask แสดงสรุปงานวิจัย (/research) และหน้าแก้ไข (/edit)
+# รับผิดชอบ  www.id-023.com/research  และทั้งหมดของ  admin.id-023.com
+#
+# strategy: Recreate  <-- สำคัญมาก
+#   เพราะ PVC เป็น ReadWriteOnce ถ้าใช้ RollingUpdate pod ใหม่จะรอ volume
+#   จาก pod เก่าที่ยังไม่ตาย ทำให้ deploy ค้าง
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-research
+  namespace: id-023
+  labels:
+    app: app-research
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: app-research
+  template:
+    metadata:
+      labels:
+        app: app-research
+    spec:
+      containers:
+        - name: flask
+          image: python:3.10-slim
+          imagePullPolicy: IfNotPresent
+          command: ["/bin/sh", "-c"]
+          args:
+            - pip install --no-cache-dir --disable-pip-version-check -q flask &&
+              exec python /app/app.py
+          env:
+            - name: PYTHONUNBUFFERED
+              value: "1"
+            - name: DATA_FILE
+              value: /data/research.txt
+            - name: DEFAULT_FILE
+              value: /app/default.txt
+          ports:
+            - name: http
+              containerPort: 5000
+          volumeMounts:
+            - name: code
+              mountPath: /app          # โค้ด + ข้อความตั้งต้น (อ่านอย่างเดียว)
+            - name: data
+              mountPath: /data         # PVC เก็บไฟล์ที่แก้ผ่าน /edit
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 10
+            periodSeconds: 5
+            failureThreshold: 40
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 5000
+            initialDelaySeconds: 120
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 50m
+              memory: 96Mi
+            limits:
+              cpu: 500m
+              memory: 256Mi
+      volumes:
+        - name: code
+          configMap:
+            name: research-app-code
+        - name: data
+          persistentVolumeClaim:
+            claimName: research-data-pvc

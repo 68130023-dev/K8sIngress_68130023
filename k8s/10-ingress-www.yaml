@@ -1,0 +1,50 @@
+# Ingress หลัก : www.id-023.com
+#
+#   /          -> app-about     (หน้าแรก)
+#   /about     -> app-about     (รูป ชื่อ รหัสนักศึกษา)
+#   /research  -> app-research  (สรุปงานวิจัย)
+#   /api       -> app-api       (/api/<ข้อความ>)
+#
+# Traefik จะจับคู่ path ที่ยาวกว่า (เฉพาะเจาะจงกว่า) ก่อนเสมอ
+# ดังนั้น /about จึงถูกเลือกก่อน / แม้ทั้งคู่เป็น Prefix
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: main-ingress-023
+  namespace: id-023
+  labels:
+    app: id-023
+spec:
+  ingressClassName: traefik
+  rules:
+    - host: www.id-023.com
+      http:
+        paths:
+          - path: /about
+            pathType: Prefix
+            backend:
+              service:
+                name: app-about
+                port:
+                  number: 80
+          - path: /research
+            pathType: Prefix
+            backend:
+              service:
+                name: app-research
+                port:
+                  number: 80
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: app-api
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: app-about
+                port:
+                  number: 80
